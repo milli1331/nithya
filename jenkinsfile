@@ -1,0 +1,37 @@
+pipeline {
+    agent any  
+    tools {
+        maven 'Maven'  
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/milli1331/nithya.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean package' 
+            }
+        }
+        stage('Test') {by
+            steps {
+                sh 'mvn test' 
+            }
+        }       
+        stage('Run Application') {
+            steps {
+                sh 'java -jar target/nithya-1.0-SNAPSHOT.jar'
+            }
+        }        
+    }
+    post {
+        success {
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+    }
+}
+
